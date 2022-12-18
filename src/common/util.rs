@@ -5,7 +5,12 @@ use serde::Serialize;
 pub struct ApiResult<'a, T> {
     pub code: u16,
     pub message: &'a str,
-    pub data: Option<T>,
+    pub data: T,
+}
+#[derive(Debug, Clone, Serialize, AllArgsConstructor)]
+pub struct ApiResultErr<'a> {
+    pub code: u16,
+    pub message: &'a str,
 }
 
 #[derive(Clone)]

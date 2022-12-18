@@ -2,7 +2,7 @@ use actix_web::http::StatusCode;
 use actix_web::patch;
 use actix_web::{dev::HttpServiceFactory, post, web, HttpResponse, Responder, Result};
 
-use crate::common::{ApiResult, AppState};
+use crate::common::{ApiResult, ApiResultErr, AppState};
 use crate::model::User;
 use rbatis::rbdc::db::ExecResult;
 
@@ -15,10 +15,10 @@ async fn save(state: web::Data<AppState>, body: web::Json<User>) -> Result<impl 
     let result: ExecResult = User::insert(&mut db, &user).await.unwrap();
     user.set_id(result.last_insert_id.as_u64());
 
-    // TODO:: 返回值用 Eether
+    // TODO:: 返回值用 Either
     let response = HttpResponse::Ok()
         .status(StatusCode::CREATED)
-        .json(ApiResult::new(0, "", Some(user)));
+        .json(ApiResult::new(0, "", user));
     Ok(response)
 }
 
@@ -29,12 +29,12 @@ async fn update(state: web::Data<AppState>, body: web::Json<User>) -> Result<imp
 
     let result: ExecResult = User::update_by_column(db, &user, "id").await.unwrap();
     let response = if result.rows_affected == 1 {
-        HttpResponse::Ok().json(ApiResult::new(0, "", Some(user)))
+        HttpResponse::Ok().json(ApiResult::new(0, "", user))
     } else {
         let s = format!("The updated resource {} not found", user.id.unwrap());
         HttpResponse::Ok()
             .status(StatusCode::GONE)
-            .json(ApiResult::<User>::new(0, &s, None))
+            .json(ApiResultErr::new(0, &s))
     };
     Ok(response)
 }
