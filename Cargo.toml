@@ -1,0 +1,21 @@
+[package]
+name = "example_rbatis"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+fast_log = "1.5.51"
+log = "0.4.17"
+rbatis = "4.0.44"
+rbdc-mysql = "0.1.18"
+rbs = "0.1.13"
+serde = { version = "1.0.151", features = ["derive"] }
+serde_json = "1.0.89"
+
+actix-web = "4.2.1"
+error-chain = "0.12.4"
+tracing = "0.1.37"
+tracing-subscriber = "0.3.16"
+lombok = "0.3.3"
