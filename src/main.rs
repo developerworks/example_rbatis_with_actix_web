@@ -8,6 +8,8 @@ mod common;
 mod controller;
 mod model;
 
+use crate::controller::{openapi, user_controller};
+
 error_chain! {
     foreign_links {
         Io(std::io::Error);
@@ -34,7 +36,8 @@ async fn main() -> Result<()> {
     let server = HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(state.clone()))
-            .configure(register_routes)
+            .configure(user_controller::register_routes)
+            .configure(openapi::init)
     })
     .workers(5)
     .bind(("127.0.0.1", 9991))?

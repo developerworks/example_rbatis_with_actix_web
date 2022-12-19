@@ -8,8 +8,15 @@ use rbatis::rbdc::db::ExecResult;
 
 rbatis::crud!(User {});
 
+#[utoipa::path(
+    request_body = User,
+    responses(
+        (status = 201, description = "User created successfully", body = ApiResult<User>),
+        (status = 409, description = "User with id already exists", body = ApiResultErr)
+    )
+)]
 #[post("/save")]
-async fn save(state: web::Data<AppState>, body: web::Json<User>) -> Result<impl Responder> {
+pub async fn save(state: web::Data<AppState>, body: web::Json<User>) -> Result<impl Responder> {
     let mut db = &state.pool.clone();
     let mut user = body.to_owned();
     let result: ExecResult = User::insert(&mut db, &user).await.unwrap();
@@ -22,6 +29,11 @@ async fn save(state: web::Data<AppState>, body: web::Json<User>) -> Result<impl 
     Ok(response)
 }
 
+#[utoipa::path(
+    responses(
+        (status = 200, description = "Update user by id", body = ApiResult<User>)
+    )
+)]
 #[patch("/{id}")]
 async fn update(state: web::Data<AppState>, body: web::Json<User>) -> Result<impl Responder> {
     let db = &mut state.pool.clone();
@@ -41,4 +53,8 @@ async fn update(state: web::Data<AppState>, body: web::Json<User>) -> Result<imp
 
 pub fn api_routes() -> impl HttpServiceFactory {
     web::scope("/user").service(save).service(update)
+}
+
+pub fn register_routes(cfg: &mut web::ServiceConfig) {
+    cfg.service(api_routes());
 }

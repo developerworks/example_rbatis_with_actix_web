@@ -1,2 +1,2 @@
-mod patient;
-pub use patient::*;
+pub mod user;
+pub use user::*;
