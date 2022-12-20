@@ -6,13 +6,37 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+fast_log = { workspace = true }
+log = { workspace = true }
+rbatis = { workspace = true }
+rbdc-mysql = { workspace = true }
+rbs = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+actix-web = { workspace = true }
+error-chain = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+lombok = { workspace = true }
+utoipa = { workspace = true }
+utoipa-swagger-ui = { workspace = true }
+nacos-sdk = { workspace = true }
+
+[workspace]
+members = [
+    ".",
+    "config"
+]
+[workspace.dependencies]
 fast_log = "1.5.51"
 log = "0.4.17"
-rbatis = "4.0.44"
+rbatis = { version = "4.0.44", features = ["upper_case_sql_keyword"] }
 rbdc-mysql = "0.1.18"
 rbs = "0.1.13"
 serde = { version = "1.0.151", features = ["derive"] }
 serde_json = "1.0.89"
+serde_yaml = "0.9.14"
 
 actix-web = "4.2.1"
 error-chain = "0.12.4"
@@ -21,3 +45,5 @@ tracing-subscriber = "0.3.16"
 lombok = "0.3.3"
 utoipa = { version = "2.4.2", features = ["actix_extras"] }
 utoipa-swagger-ui = { version = "3.0.1", features = ["actix-web"] }
+nacos-sdk = "0.2.2"
+schemars = "0.8.11"
